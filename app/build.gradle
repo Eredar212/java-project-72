@@ -12,6 +12,7 @@ buildscript {
 plugins {
     id 'application'
     id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "io.freefair.lombok" version "8.3"
 }
 
 group = 'hexlet.code'
@@ -29,6 +30,9 @@ dependencies {
     implementation("io.javalin:javalin-rendering:6.0.0")
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.11'
+    // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.1.0'
+
 }
 
 test {
