@@ -4,13 +4,10 @@ import com.zaxxer.hikari.HikariConfig;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
-import hexlet.code.dto.BasePage;
 import io.javalin.Javalin;
+import io.javalin.rendering.template.JavalinJte;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.javalin.rendering.template.JavalinJte;
-
-import java.util.Collections;
 
 public class App {
     public static void main(String[] args) {
@@ -21,14 +18,17 @@ public class App {
     public static Javalin getApp() {
         Logger logger = LoggerFactory.getLogger(App.class);
 
-        var app = Javalin.create();
+        var app = Javalin.create(config -> {
+            config.bundledPlugins.enableDevLogging();
+            config.fileRenderer(new JavalinJte(createTemplateEngine()));
+        });
         app.before(ctx -> {
             ctx.contentType("text/html; charset=utf-8");
         });
 
         //root
-        var basePage = new BasePage("home", "main page");
-        app.get("/", ctx -> ctx.render("templates/index.jte", Collections.singletonMap("page", basePage)));
+        app.get("/", ctx -> ctx.render("index.jte"));
+
 
         //init DB
         var hikariConfig = new HikariConfig();
@@ -39,8 +39,6 @@ public class App {
         } else {
             hikariConfig.setJdbcUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
         }
-
-        JavalinJte jte = new JavalinJte(createTemplateEngine());
         return app;
     }
 
