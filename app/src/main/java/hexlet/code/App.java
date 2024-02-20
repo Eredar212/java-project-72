@@ -4,10 +4,13 @@ import com.zaxxer.hikari.HikariConfig;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.dto.BasePage;
 import io.javalin.Javalin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.javalin.rendering.template.JavalinJte;
+
+import java.util.Collections;
 
 public class App {
     public static void main(String[] args) {
@@ -24,7 +27,8 @@ public class App {
         });
 
         //root
-        app.get("/", ctx -> ctx.render("index.jte","Hello World"));
+        var basePage = new BasePage("home", "main page");
+        app.get("/", ctx -> ctx.render("templates/index.jte", Collections.singletonMap("page", basePage)));
 
         //init DB
         var hikariConfig = new HikariConfig();
