@@ -33,6 +33,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.1.0'
     implementation "gg.jte:jte:3.1.9"
+    implementation "com.h2database:h2:2.2.220"
 }
 
 test {

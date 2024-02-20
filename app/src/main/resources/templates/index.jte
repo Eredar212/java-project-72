@@ -1,3 +1,5 @@
+@import hexlet.code.dto.BasePage
+@param BasePage page
 @template.layout.page(
 content = @`
     <section>
@@ -27,4 +29,6 @@ content = @`
         </div>
 
     </section>
-`)
+`,
+page = page
+)
