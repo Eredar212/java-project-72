@@ -19,12 +19,12 @@ import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 public class App {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Javalin app = getApp();
         app.start(getPort());
     }
 
-    public static Javalin getApp() throws IOException {
+    public static Javalin getApp() {
         Logger logger = LoggerFactory.getLogger(App.class);
 
         var app = Javalin.create(config -> {
@@ -51,15 +51,18 @@ public class App {
         } else {
             hikariConfig.setJdbcUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
         }
-
-        /*var hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl("jdbc:h2:mem:hexlet;DB_CLOSE_DELAY=-1;");*/
+        //System.out.println("DATABASE_URL" + System.getenv("DATABASE_URL"));
 
         var dataSource = new HikariDataSource(hikariConfig);
         var url = App.class.getClassLoader().getResource("schema.sql");
         var file = new File(url.getFile());
-        var sql = Files.lines(file.toPath())
-                .collect(Collectors.joining("\n"));
+        String sql = null;
+        try {
+            sql = Files.lines(file.toPath())
+                    .collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try (var connection = dataSource.getConnection();
              var statement = connection.createStatement()) {
             statement.execute(sql);
@@ -67,6 +70,7 @@ public class App {
             throw new RuntimeException(e);
         }
         BaseRepository.dataSource = dataSource;
+
         return app;
     }
 

@@ -8,6 +8,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class UrlsPage{
+public class UrlsPage {
     List<Url> urls;
 }
