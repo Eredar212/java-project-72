@@ -45,7 +45,7 @@ public class App {
 
         //init DB
         var hikariConfig = new HikariConfig();
-        if (System.getenv("DATABASE_URL") != null) {
+        if (System.getenv("INTERNAL_DATABSE_URL") != null) {
             hikariConfig.setUsername(System.getenv("DATABASE_USERNAME"));
             hikariConfig.setPassword(System.getenv("DATABASE_PASSWORD"));
             hikariConfig.setJdbcUrl(System.getenv("DATABASE_URL"));
