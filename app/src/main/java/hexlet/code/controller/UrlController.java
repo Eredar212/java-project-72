@@ -14,6 +14,7 @@ import io.javalin.validation.ValidationException;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.SneakyThrows;
+import org.jsoup.Jsoup;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -74,18 +75,11 @@ public class UrlController {
             System.out.println(url.getName());
             HttpResponse<String> response = Unirest.get(url.getName()).asString();
             var statusCode = response.getStatus();
-
-            //var body1=response.getBody().getObject();
-            //System.out.println("body1" + body1.toString());;
-            //var title = response.getBody().getObject().getJSONObject("html").get("title");
-            //var h1 = body.get("h1");
-            //System.out.println("body" + body);
-            //System.out.println("title" + title.toString());
-            //System.out.println("h1" + h1);
-            //var description = body.get("meta[name=description]");
-            var title = "test_title";
-            var h1 = "h1";
-            var description = "description";
+            var body = Jsoup.parse(response.getBody());
+            var title = body.title();
+            var h1 = body.selectFirst("h1") !=null ? body.selectFirst("h1").wholeText() : "none";
+            String description = body.select("meta[name=description]") !=null ? body.select("meta[name=description]").get(0).attr("content") : "none";
+            System.out.println("description" + description);
             UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id);
             UrlCheckRepository.save(urlCheck);
             ctx.redirect(NamedRoutes.urlPath(id));
