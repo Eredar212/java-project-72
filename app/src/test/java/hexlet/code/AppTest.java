@@ -1,6 +1,8 @@
 package hexlet.code;
 
 import hexlet.code.model.Url;
+import hexlet.code.model.UrlCheck;
+import hexlet.code.repository.UrlCheckRepository;
 import hexlet.code.repository.UrlRepository;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -132,5 +135,14 @@ public class AppTest {
             var response = client.post("/urls/" + urlForCheck.getId() + "/checks");
             assertThat(response.code()).isEqualTo(200);
         });
+        List<UrlCheck> urlChecks = UrlCheckRepository.getEntities(urlForCheck.getId());
+        assertThat(urlChecks.isEmpty()).isFalse();
+
+        UrlCheck actualCheck = urlChecks.get(0);
+
+        assertThat(actualCheck.getStatusCode()).isEqualTo(200);
+        assertThat(actualCheck.getTitle()).isEqualTo("Title");
+        assertThat(actualCheck.getH1()).isEqualTo("Test H1 Tag");
+        assertThat(actualCheck.getDescription()).isEqualTo("Хекслет — лучшая школа");
     }
 }

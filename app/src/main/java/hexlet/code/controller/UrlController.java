@@ -25,21 +25,22 @@ import java.util.Map;
 public class UrlController {
     public static void create(Context ctx) throws SQLException {
         try {
-            var name = ctx.formParamAsClass("url", String.class)
-                    .check(value -> !value.isEmpty(), "Название не должно быть пустым")
-                    .get();
+            var name = ctx.formParamAsClass("url", String.class).check(value -> !value.isEmpty(),
+                    "Название не должно быть пустым").get();
             var parsedUrl = new URI(name);
             String protocol = parsedUrl.getScheme();
             String authority = parsedUrl.getAuthority();
             var normalizedUrl = String.format("%s://%s", protocol, authority);
             if (UrlRepository.find(normalizedUrl).isPresent()) {
                 var page = new BasePage("info", "Страница уже существует");
-                ctx.render("allUrls.jte", Map.of("page", page, "urlsPage", new UrlsPage(UrlRepository.getEntities())));
+                ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
+                        new UrlsPage(UrlRepository.getEntities())));
             } else {
                 var url = new Url(normalizedUrl);
                 UrlRepository.save(url);
                 var page = new BasePage("success", "Страница успешно добавлена");
-                ctx.render("allUrls.jte", Map.of("page", page, "urlsPage", new UrlsPage(UrlRepository.getEntities())));
+                ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
+                        new UrlsPage(UrlRepository.getEntities())));
             }
 
         } catch (ValidationException | URISyntaxException e) {
@@ -77,9 +78,9 @@ public class UrlController {
             var statusCode = response.getStatus();
             var body = Jsoup.parse(response.getBody());
             var title = body.title();
-            var h1 = body.selectFirst("h1") !=null ? body.selectFirst("h1").wholeText() : "none";
-            String description = body.select("meta[name=description]") !=null ? body.select("meta[name=description]").get(0).attr("content") : "none";
-            System.out.println("description" + description);
+            var h1 = body.selectFirst("h1") != null ? body.selectFirst("h1").wholeText() : "none";
+            String description = body.selectFirst("meta[name=description]") != null
+                    ? body.selectFirst("meta[name=description]").attr("content") : "none";
             UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id);
             UrlCheckRepository.save(urlCheck);
             ctx.redirect(NamedRoutes.urlPath(id));
