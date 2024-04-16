@@ -53,7 +53,12 @@ dependencies {
     //     Required by:
     //         project : > org.jacoco:jacoco-maven-plugin:0.8.10
     implementation group: 'org.apache.maven.reporting', name: 'maven-reporting-api', version: '4.0.0-M7'
+
+    implementation group: 'com.konghq', name: 'unirest-java', version: '3.14.5'
+    implementation group: 'com.konghq', name: 'unirest-objectmapper-jackson', version: '4.2.9'
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }
+
 
 test {
     useJUnitPlatform()

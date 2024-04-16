@@ -40,6 +40,7 @@ public class App {
         app.post("/urls", UrlController::create);
         app.get("/urls", UrlController::index);
         app.get("/urls/{id}", UrlController::show);
+        app.post("/urls/{id}/checks", UrlController::check);
 
 
         //init DB
