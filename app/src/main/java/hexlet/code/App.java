@@ -45,8 +45,8 @@ public class App {
 
         //init DB
         var hikariConfig = new HikariConfig();
-        if (System.getenv("INTERNAL_DATABSE_URL") != null) {
-            hikariConfig.setJdbcUrl(System.getenv("INTERNAL_DATABSE_URL"));
+        if (System.getenv("EREDAR_DB_URL") != null) {
+            hikariConfig.setJdbcUrl(System.getenv("EREDAR_DB_URL"));
         } else {
             hikariConfig.setJdbcUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
         }
