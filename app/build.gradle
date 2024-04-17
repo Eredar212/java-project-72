@@ -46,6 +46,7 @@ dependencies {
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
     implementation group: 'org.jacoco', name: 'jacoco-maven-plugin', version: '0.8.10'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 
     //required by project : > org.jacoco:jacoco-maven-plugin:0.8.10,
     // иначе ошибка > Could not resolve all files for configuration ':compileClasspath'.
