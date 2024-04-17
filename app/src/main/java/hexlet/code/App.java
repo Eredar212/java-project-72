@@ -45,8 +45,8 @@ public class App {
 
         //init DB
         var hikariConfig = new HikariConfig();
-        if (System.getenv("EREDAR_DB_URL") != null) {
-            hikariConfig.setJdbcUrl(System.getenv("EREDAR_DB_URL"));
+        if (System.getenv("JDBC_DATABASE_URL") != null) {
+            hikariConfig.setJdbcUrl(System.getenv("JDBC_DATABASE_URL"));
         } else {
             hikariConfig.setJdbcUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
         }
@@ -74,7 +74,7 @@ public class App {
     }
 
     private static int getPort() {
-        String port = System.getenv().getOrDefault("DB_PORT", "7070");
+        String port = System.getenv().getOrDefault("PORT", "7070");
         return Integer.valueOf(port);
     }
 
