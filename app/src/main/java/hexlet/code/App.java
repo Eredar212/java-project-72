@@ -12,9 +12,10 @@ import io.javalin.rendering.template.JavalinJte;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
 
@@ -53,12 +54,18 @@ public class App {
         //System.out.println("DATABASE_URL" + System.getenv("DATABASE_URL"));
 
         var dataSource = new HikariDataSource(hikariConfig);
-        var url = App.class.getClassLoader().getResource("schema.sql");
+        /*var url = App.class.getClassLoader().getResource("schema.sql");
         var file = new File(url.getFile());
         String sql = null;
         try {
             sql = Files.lines(file.toPath())
                     .collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
+        String sql = null;
+        try {
+            sql = getFile("schema.sql");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,5 +90,13 @@ public class App {
         ResourceCodeResolver codeResolver = new ResourceCodeResolver("templates", classLoader);
         TemplateEngine templateEngine = TemplateEngine.create(codeResolver, ContentType.Html);
         return templateEngine;
+    }
+
+    public static String getFile(String fileName) throws IOException {
+        var inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.joining("\n"));
+        }
+
     }
 }
