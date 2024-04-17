@@ -9,7 +9,7 @@ import java.util.List;
 
 public class UrlCheckRepository extends BaseRepository {
     public static void save(UrlCheck url) throws SQLException {
-        String sql = "INSERT INTO url_checks (url_id,status_code,h1,title,description) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO url_checks (url_id,status_code,h1,title,description,created_at) VALUES (?,?,?,?,?,?)";
         /*url_id INT REFERENCES urls(id) NOT NULL,
         status_code INT,
         h1 VARCHAR(100),
@@ -22,6 +22,7 @@ public class UrlCheckRepository extends BaseRepository {
             preparedStatement.setString(3, url.getH1());
             preparedStatement.setString(4, url.getTitle());
             preparedStatement.setString(5, url.getDescription());
+            preparedStatement.setTimestamp(6, url.getCreatedAt());
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
             // Устанавливаем ID в сохраненную сущность
@@ -47,9 +48,8 @@ public class UrlCheckRepository extends BaseRepository {
                 var h1 = resultSet.getString("h1");
                 var description = resultSet.getString("description");
                 var createdAt = resultSet.getTimestamp("created_at");
-                var urlCheck = new UrlCheck(statusCode, title, h1, description, urlId);
+                var urlCheck = new UrlCheck(statusCode, title, h1, description, urlId, createdAt);
                 urlCheck.setId(id);
-                urlCheck.setCreatedAt(createdAt);
                 urlCheck.setUrlId(urlId);
                 result.add(urlCheck);
             }

@@ -19,7 +19,9 @@ import org.jsoup.Jsoup;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 
 public class UrlController {
@@ -36,7 +38,8 @@ public class UrlController {
                 ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
                         new UrlsPage(UrlRepository.getEntities())));
             } else {
-                var url = new Url(normalizedUrl);
+                Timestamp createdAt = new Timestamp(new Date().getTime());
+                var url = new Url(normalizedUrl, createdAt);
                 UrlRepository.save(url);
                 var page = new BasePage("success", "Страница успешно добавлена");
                 ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
@@ -81,7 +84,8 @@ public class UrlController {
             var h1 = body.selectFirst("h1") != null ? body.selectFirst("h1").wholeText() : "none";
             String description = body.selectFirst("meta[name=description]") != null
                     ? body.selectFirst("meta[name=description]").attr("content") : "none";
-            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id);
+            Timestamp createdAt = new Timestamp(new Date().getTime());
+            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id, createdAt);
             UrlCheckRepository.save(urlCheck);
             ctx.redirect(NamedRoutes.urlPath(id));
         } catch (Exception e) {

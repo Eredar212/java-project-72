@@ -11,10 +11,11 @@ import java.util.Optional;
 
 public class UrlRepository extends BaseRepository {
     public static void save(Url url) throws SQLException {
-        String sql = "INSERT INTO urls (name) VALUES (?)";
+        String sql = "INSERT INTO urls (name,created_at) VALUES (?,?)";
         try (var conn = dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, url.getName());
+            preparedStatement.setTimestamp(2, url.getCreatedAt());
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
             // Устанавливаем ID в сохраненную сущность
@@ -35,9 +36,8 @@ public class UrlRepository extends BaseRepository {
             if (resultSet.next()) {
                 var name = resultSet.getString("name");
                 Timestamp createdAt = resultSet.getTimestamp("created_at");
-                var url = new Url(name);
+                var url = new Url(name, createdAt);
                 url.setId(id);
-                url.setCreatedAt(createdAt);
                 return Optional.of(url);
             }
             return Optional.empty();
@@ -53,9 +53,8 @@ public class UrlRepository extends BaseRepository {
             if (resultSet.next()) {
                 var id = resultSet.getLong("id");
                 Timestamp createdAt = resultSet.getTimestamp("created_at");
-                var url = new Url(name);
+                var url = new Url(name, createdAt);
                 url.setId(id);
-                url.setCreatedAt(createdAt);
                 return Optional.of(url);
             }
             return Optional.empty();
@@ -72,9 +71,8 @@ public class UrlRepository extends BaseRepository {
                 var id = resultSet.getLong("id");
                 var name = resultSet.getString("name");
                 Timestamp createdAt = resultSet.getTimestamp("created_at");
-                var url = new Url(name);
+                var url = new Url(name, createdAt);
                 url.setId(id);
-                url.setCreatedAt(createdAt);
                 result.add(url);
             }
             return result;

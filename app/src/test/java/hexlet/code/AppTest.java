@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,7 +115,8 @@ public class AppTest {
     void testShowUrl() {
         JavalinTest.test(app, (server, client) -> {
             var name = "https://ru.hexlet.io";
-            var url = new Url(name);
+            Timestamp createdAt = new Timestamp(new Date().getTime());
+            var url = new Url(name, createdAt);
             UrlRepository.save(url);
 
             assertTrue(UrlRepository.find(url.getId()).isPresent());
@@ -129,7 +132,8 @@ public class AppTest {
     @Test
     void testCheckUrl() throws SQLException {
         var url = mockServer.url("/").toString();
-        Url urlForCheck = new Url(url);
+        Timestamp createdAt = new Timestamp(new Date().getTime());
+        Url urlForCheck = new Url(url, createdAt);
         UrlRepository.save(urlForCheck);
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/" + urlForCheck.getId() + "/checks");
