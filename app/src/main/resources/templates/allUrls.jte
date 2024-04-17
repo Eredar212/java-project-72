@@ -1,5 +1,7 @@
 @import hexlet.code.dto.UrlsPage
 @import hexlet.code.dto.BasePage
+@import hexlet.code.repository.UrlCheckRepository
+@import java.time.format.DateTimeFormatter
 @param UrlsPage urlsPage
 @param BasePage page
 @template.layout.page(
@@ -27,12 +29,20 @@ content = @`
                                     ${url.getId()}
                                 </td>
                                 <td>
-                                    <a href="/urls/${url.getId()}">${url.getName()}</a>
+                                    <a href="urls/${url.getId()}">${url.getName()}</a>
                                 </td>
                                 <td>
-                                    ${String.valueOf(url.getCreatedAt())}
+                                    @if(!UrlCheckRepository.getEntities(url.getId()).isEmpty())
+                                        ${UrlCheckRepository.getEntities(url.getId()).get(0).getCreatedAt()
+                                            .toLocalDateTime()
+                                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}
+                                    @endif
                                 </td>
                                 <td>
+                                    @if(!UrlCheckRepository.getEntities(url.getId()).isEmpty())
+                                        ${UrlCheckRepository.getEntities(url.getId()).get(0)
+                                            .getStatusCode()}
+                                    @endif
                                 </td>
                             </tr>
                         @endfor
@@ -44,5 +54,5 @@ content = @`
 
     </section>
 `,
-    page =page
+page =page
 )

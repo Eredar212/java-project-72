@@ -33,8 +33,8 @@ public class UrlCheckRepository extends BaseRepository {
         }
     }
 
-    public static List<UrlCheck> getEntities(Long urlId) throws SQLException {
-        var sql = "SELECT * FROM url_checks WHERE url_id = ?";
+    public static List<UrlCheck> getEntities(Long urlId) {
+        var sql = "SELECT * FROM url_checks WHERE url_id = ? ORDER BY created_at DESC";
         try (var conn = dataSource.getConnection();
              var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, urlId);
@@ -54,6 +54,8 @@ public class UrlCheckRepository extends BaseRepository {
                 result.add(urlCheck);
             }
             return result;
+        } catch (SQLException e) {
+            return new ArrayList<>();
         }
     }
 }

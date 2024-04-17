@@ -45,10 +45,10 @@ public class App {
 
         //init DB
         var hikariConfig = new HikariConfig();
-        if (System.getenv("INTERNAL_DATABSE_URL") != null) {
+        if (System.getenv("JDBC_DB_URL") != null) {
             hikariConfig.setUsername(System.getenv("DATABASE_USERNAME"));
             hikariConfig.setPassword(System.getenv("DATABASE_PASSWORD"));
-            hikariConfig.setJdbcUrl(System.getenv("INTERNAL_DATABSE_URL"));
+            hikariConfig.setJdbcUrl(System.getenv("JDBC_DB_URL"));
         } else {
             hikariConfig.setJdbcUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
         }

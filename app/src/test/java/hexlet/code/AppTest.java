@@ -87,15 +87,15 @@ public class AppTest {
     @Test
     void testRegisterNewSites() {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=https://ru.hexlet.io";
+            var requestBody = "url=https://www.google.ru/";
             client.post(NamedRoutes.urlsPath(), requestBody);
             var response = client.get(NamedRoutes.urlsPath());
             assertThat(response.code()).isEqualTo(200);
             var bodyString = response.body().string();
 
-            assertEquals("https://ru.hexlet.io", UrlRepository.find("https://ru.hexlet.io").get().getName());
+            assertEquals("https://www.google.ru", UrlRepository.find("https://www.google.ru").get().getName());
             assertThat(bodyString).contains("Сайты");
-            assertThat(bodyString).contains("https://ru.hexlet.io");
+            assertThat(bodyString).contains("https://www.google.ru");
         });
     }
 
