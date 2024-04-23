@@ -32,14 +32,14 @@ content = @`
                                 </td>
                                 <td>
                                     @if(!urlsPage.getUrlsCheck().isEmpty())
-                                        ${urlsPage.getUrlsCheck().get(Long.valueOf(url.getId())).getCreatedAt()
+                                        ${urlsPage.getUrlsCheck().get(String.valueOf(url.getId())).getCreatedAt()
                                             .toLocalDateTime()
                                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}
                                     @endif
                                 </td>
                                 <td>
                                     @if(!urlsPage.getUrlsCheck().isEmpty())
-                                        ${urlsPage.getUrlsCheck().get(url.getId()).getStatusCode()}
+                                        ${urlsPage.getUrlsCheck().get(String.valueOf(url.getId())).getStatusCode()}
                                     @endif
                                 </td>
                             </tr>

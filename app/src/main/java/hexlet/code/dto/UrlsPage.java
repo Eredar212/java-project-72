@@ -12,5 +12,5 @@ import java.util.Map;
 @Getter
 public class UrlsPage {
     List<Url> urls;
-    Map<Long, UrlCheck> urlsCheck;
+    Map<String, UrlCheck> urlsCheck;
 }

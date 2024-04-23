@@ -62,14 +62,14 @@ public class UrlCheckRepository extends BaseRepository {
         }
     }
 
-    public static Map<Long, UrlCheck> findLastCheck() {
+    public static Map<String, UrlCheck> findLastCheck() {
         var sql = "SELECT * FROM (SELECT id, url_id, status_code, title, h1, description, created_at,"
                 + " row_number() OVER (PARTITION BY url_id ORDER BY created_at DESC) rn FROM url_checks)"
                 + " last_check where rn=1";
         try (var conn = dataSource.getConnection();
              var stmt = conn.prepareStatement(sql)) {
             var resultSet = stmt.executeQuery();
-            var result = new HashMap<Long, UrlCheck>();
+            var result = new HashMap<String, UrlCheck>();
             while (resultSet.next()) {
                 var id = resultSet.getLong("id");
                 var statusCode = resultSet.getInt("status_code");
@@ -81,7 +81,7 @@ public class UrlCheckRepository extends BaseRepository {
                 var urlCheck = new UrlCheck(statusCode, title, h1, description, urlId);
                 urlCheck.setId(id);
                 urlCheck.setCreatedAt(createdAt);
-                result.put(urlId, urlCheck);
+                result.put(String.valueOf(urlId), urlCheck);
             }
             return result;
         } catch (SQLException e) {
