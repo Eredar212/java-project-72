@@ -31,14 +31,14 @@ content = @`
                                     <a href="urls/${url.getId()}">${url.getName()}</a>
                                 </td>
                                 <td>
-                                    @if(!urlsPage.getUrlsCheck().isEmpty())
+                                    @if(!urlsPage.getUrlsCheck().isEmpty() && urlsPage.getUrlsCheck().get(String.valueOf(url.getId())) != null)
                                         ${urlsPage.getUrlsCheck().get(String.valueOf(url.getId())).getCreatedAt()
                                             .toLocalDateTime()
                                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}
                                     @endif
                                 </td>
                                 <td>
-                                    @if(!urlsPage.getUrlsCheck().isEmpty())
+                                    @if(!urlsPage.getUrlsCheck().isEmpty() && urlsPage.getUrlsCheck().get(String.valueOf(url.getId())) != null)
                                         ${urlsPage.getUrlsCheck().get(String.valueOf(url.getId())).getStatusCode()}
                                     @endif
                                 </td>

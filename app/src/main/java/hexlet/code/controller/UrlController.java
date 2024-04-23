@@ -20,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class UrlController {
@@ -35,13 +34,13 @@ public class UrlController {
             if (UrlRepository.find(normalizedUrl).isPresent()) {
                 var page = new BasePage("info", "Страница уже существует");
                 ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
-                        new UrlsPage(UrlRepository.getEntities(), new HashMap<>())));
+                        new UrlsPage(UrlRepository.getEntities(), UrlCheckRepository.findLastCheck())));
             } else {
                 var url = new Url(normalizedUrl);
                 UrlRepository.save(url);
                 var page = new BasePage("success", "Страница успешно добавлена");
                 ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
-                        new UrlsPage(UrlRepository.getEntities(), new HashMap<>())));
+                        new UrlsPage(UrlRepository.getEntities(), UrlCheckRepository.findLastCheck())));
             }
 
         } catch (ValidationException | URISyntaxException e) {
@@ -53,6 +52,7 @@ public class UrlController {
     public static void index(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
         Map<String, UrlCheck> urlsCheck = UrlCheckRepository.findLastCheck();
+        //System.out.println("urlscvhelc = " + urlsCheck.entrySet());
         var urlsPage = new UrlsPage(urls, urlsCheck);
         ctx.render("allUrls.jte", Collections.singletonMap("urlsPage", urlsPage));
     }
