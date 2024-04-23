@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -12,8 +13,8 @@ public class Url {
     private String name;
     private Timestamp createdAt;
 
-    public Url(String name, Timestamp createdAt) {
+    public Url(String name) {
         this.name = name;
-        this.createdAt = createdAt;
+        this.createdAt = new Timestamp(new Date().getTime());
     }
 }

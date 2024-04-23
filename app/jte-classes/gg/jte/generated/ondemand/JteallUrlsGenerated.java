@@ -1,11 +1,10 @@
 package gg.jte.generated.ondemand;
 import hexlet.code.dto.UrlsPage;
 import hexlet.code.dto.BasePage;
-import hexlet.code.repository.UrlCheckRepository;
 import java.time.format.DateTimeFormatter;
 public final class JteallUrlsGenerated {
 	public static final String JTE_NAME = "allUrls.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,1,2,3,4,4,4,6,9,9,27,27,30,30,30,33,33,33,33,33,33,33,36,36,37,39,39,39,39,40,40,43,43,44,45,45,45,46,46,49,49,57,57,57,57,57,4,5,5,5,5};
+	public static final int[] JTE_LINE_INFO = {0,0,1,2,3,3,3,5,8,8,26,26,29,29,29,32,32,32,32,32,32,32,35,35,36,38,38,38,38,39,39,42,42,43,43,43,44,44,47,47,55,55,55,55,55,3,4,4,4,4};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, UrlsPage urlsPage, BasePage page) {
 		gg.jte.generated.ondemand.layout.JtepageGenerated.render(jteOutput, jteHtmlInterceptor, new gg.jte.html.HtmlContent() {
 			public void writeTo(gg.jte.html.HtmlTemplateOutput jteOutput) {
@@ -22,20 +21,19 @@ public final class JteallUrlsGenerated {
 					jteOutput.setContext("a", null);
 					jteOutput.writeUserContent(url.getName());
 					jteOutput.writeContent("</a>\n                                </td>\n                                <td>\n                                    ");
-					if (!UrlCheckRepository.getEntities(url.getId()).isEmpty()) {
+					if (!urlsPage.getUrlsCheck().isEmpty()) {
 						jteOutput.writeContent("\n                                        ");
 						jteOutput.setContext("td", null);
-						jteOutput.writeUserContent(UrlCheckRepository.getEntities(url.getId()).get(0).getCreatedAt()
+						jteOutput.writeUserContent(urlsPage.getUrlsCheck().get(url.getId()).getCreatedAt()
                                             .toLocalDateTime()
                                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 						jteOutput.writeContent("\n                                    ");
 					}
 					jteOutput.writeContent("\n                                </td>\n                                <td>\n                                    ");
-					if (!UrlCheckRepository.getEntities(url.getId()).isEmpty()) {
+					if (!urlsPage.getUrlsCheck().isEmpty()) {
 						jteOutput.writeContent("\n                                        ");
 						jteOutput.setContext("td", null);
-						jteOutput.writeUserContent(UrlCheckRepository.getEntities(url.getId()).get(0)
-                                            .getStatusCode());
+						jteOutput.writeUserContent(urlsPage.getUrlsCheck().get(url.getId()).getStatusCode());
 						jteOutput.writeContent("\n                                    ");
 					}
 					jteOutput.writeContent("\n                                </td>\n                            </tr>\n                        ");

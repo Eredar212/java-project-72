@@ -19,9 +19,8 @@ import org.jsoup.Jsoup;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Collections;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class UrlController {
@@ -36,14 +35,13 @@ public class UrlController {
             if (UrlRepository.find(normalizedUrl).isPresent()) {
                 var page = new BasePage("info", "Страница уже существует");
                 ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
-                        new UrlsPage(UrlRepository.getEntities())));
+                        new UrlsPage(UrlRepository.getEntities(), new HashMap<>())));
             } else {
-                Timestamp createdAt = new Timestamp(new Date().getTime());
-                var url = new Url(normalizedUrl, createdAt);
+                var url = new Url(normalizedUrl);
                 UrlRepository.save(url);
                 var page = new BasePage("success", "Страница успешно добавлена");
                 ctx.render("allUrls.jte", Map.of("page", page, "urlsPage",
-                        new UrlsPage(UrlRepository.getEntities())));
+                        new UrlsPage(UrlRepository.getEntities(), new HashMap<>())));
             }
 
         } catch (ValidationException | URISyntaxException e) {
@@ -54,7 +52,8 @@ public class UrlController {
 
     public static void index(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
-        var urlsPage = new UrlsPage(urls);
+        var urlsCheck = UrlCheckRepository.findLastCheck();
+        var urlsPage = new UrlsPage(urls, urlsCheck);
         ctx.render("allUrls.jte", Collections.singletonMap("urlsPage", urlsPage));
     }
 
@@ -67,7 +66,7 @@ public class UrlController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        var urlChecks = UrlCheckRepository.getEntities(id);
+        var urlChecks = UrlCheckRepository.findByUrlId(id);
         var page = new UrlPage(url, urlChecks);
         ctx.render("show.jte", Collections.singletonMap("urlPage", page));
     }
@@ -76,7 +75,6 @@ public class UrlController {
         try {
             Long id = ctx.pathParamAsClass("id", Long.class).get();
             var url = UrlRepository.find(id).orElseThrow(() -> new NotFoundResponse("Url not found"));
-            System.out.println(url.getName());
             HttpResponse<String> response = Unirest.get(url.getName()).asString();
             var statusCode = response.getStatus();
             var body = Jsoup.parse(response.getBody());
@@ -84,8 +82,7 @@ public class UrlController {
             var h1 = body.selectFirst("h1") != null ? body.selectFirst("h1").wholeText() : "none";
             String description = body.selectFirst("meta[name=description]") != null
                     ? body.selectFirst("meta[name=description]").attr("content") : "none";
-            Timestamp createdAt = new Timestamp(new Date().getTime());
-            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id, createdAt);
+            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id);
             UrlCheckRepository.save(urlCheck);
             ctx.redirect(NamedRoutes.urlPath(id));
         } catch (Exception e) {

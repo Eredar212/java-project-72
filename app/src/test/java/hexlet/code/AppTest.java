@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,8 +113,7 @@ public final class AppTest {
     void testShowUrl() {
         JavalinTest.test(app, (server, client) -> {
             var name = "https://ru.hexlet.io";
-            Timestamp createdAt = new Timestamp(new Date().getTime());
-            var url = new Url(name, createdAt);
+            var url = new Url(name);
             UrlRepository.save(url);
 
             assertTrue(UrlRepository.find(url.getId()).isPresent());
@@ -132,14 +129,13 @@ public final class AppTest {
     @Test
     void testCheckUrl() throws SQLException {
         var url = mockServer.url("/").toString();
-        Timestamp createdAt = new Timestamp(new Date().getTime());
-        Url urlForCheck = new Url(url, createdAt);
+        Url urlForCheck = new Url(url);
         UrlRepository.save(urlForCheck);
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/" + urlForCheck.getId() + "/checks");
             assertThat(response.code()).isEqualTo(200);
         });
-        List<UrlCheck> urlChecks = UrlCheckRepository.getEntities(urlForCheck.getId());
+        List<UrlCheck> urlChecks = UrlCheckRepository.findByUrlId(urlForCheck.getId());
         assertThat(urlChecks.isEmpty()).isFalse();
 
         UrlCheck actualCheck = urlChecks.get(0);
