@@ -52,7 +52,7 @@ public class UrlController {
 
     public static void index(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
-        var urlsCheck = UrlCheckRepository.findLastCheck();
+        Map<Long, UrlCheck> urlsCheck = UrlCheckRepository.findLastCheck();
         var urlsPage = new UrlsPage(urls, urlsCheck);
         ctx.render("allUrls.jte", Collections.singletonMap("urlsPage", urlsPage));
     }
