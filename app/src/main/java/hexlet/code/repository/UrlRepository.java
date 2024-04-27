@@ -18,7 +18,6 @@ public class UrlRepository extends BaseRepository {
             preparedStatement.setTimestamp(2, url.getCreatedAt());
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
-            // Устанавливаем ID в сохраненную сущность
             if (generatedKeys.next()) {
                 url.setId(generatedKeys.getLong(1));
             } else {

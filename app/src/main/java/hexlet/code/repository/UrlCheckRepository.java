@@ -12,11 +12,6 @@ import java.util.Map;
 public class UrlCheckRepository extends BaseRepository {
     public static void save(UrlCheck url) throws SQLException {
         String sql = "INSERT INTO url_checks (url_id,status_code,h1,title,description,created_at) VALUES (?,?,?,?,?,?)";
-        /*url_id INT REFERENCES urls(id) NOT NULL,
-        status_code INT,
-        h1 VARCHAR(100),
-        title VARCHAR(100),
-        description VARCHAR(255),*/
         try (var conn = dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, url.getUrlId());
@@ -27,7 +22,6 @@ public class UrlCheckRepository extends BaseRepository {
             preparedStatement.setTimestamp(6, url.getCreatedAt());
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
-            // Устанавливаем ID в сохраненную сущность
             if (generatedKeys.next()) {
                 url.setId(generatedKeys.getLong(1));
             } else {

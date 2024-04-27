@@ -41,13 +41,5 @@
     ${content}
 </main>
 
-<footer class="footer border-top py-3 mt-5 bg-light">
-    <div class="container-xl">
-        <div class="text-center">
-            created by
-            <a href="https://github.com/VPactually" target="_blank">Vladislav Pomozov</a>
-        </div>
-    </div>
-</footer>
 </body>
 </html>
